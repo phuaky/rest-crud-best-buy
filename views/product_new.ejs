@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Best Buy</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <a href="/">
+      <img src="/img/logo.png">
+    </a>
+    
+    <h1>Create New Product</h1>
+
+    <div class="product">
+      <form action="/products/<%= product.id %>" method="POST">
+        <div>
+          Price: <input type="text" name="price" value="">
+        </div>
+        <div>
+          Price: <input type="text" name="price" value="">
+        </div>
+        <div>
+          Name: <input type="text" name="name" value="">
+        </div>
+        <div>
+          <p>
+            Description:
+          </p>
+          <textarea row="10" col="80" name="description" value="">
+        </div>
+
+        <button type="submit">create product</button>
+      </form>
+    </div>
+  </body>
+</html>

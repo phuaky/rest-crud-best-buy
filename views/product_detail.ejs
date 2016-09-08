@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Best Buy</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <a href="/">
+      <img src="/img/logo.png">
+    </a>
+
+    <h1>Product Detail</h1>
+
+    <div class="product">
+      <h2>
+        $<%= product.price %> - <%= product.name %>
+      </h2>
+      <p>
+        <%= product.description %>
+      </p>
+
+      <p>
+        <a href="/products/<%= product.id %>/edit">
+          edit
+        </a>
+      </p>
+    </div>
+
+    <p>
+      <a href="/products"><< back to all products</a>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Best Buy</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <a href="/">
+      <img src="/img/logo.png">
+    </a>
+
+    <h1>Product Detail</h1>
+
+    <div class="product">
+      <form action="/products/<%= product.id %>" method="PUT">
+        <div>
+          <!-- we're making our app so no one can change the id. -->
+          ID: <%= product.id %>
+        </div>
+        <div>
+          Price: <input type="text" name="price" value="<%= product.price %>">
+        </div>
+        <div>
+          Name: <input type="text" name="name" value="<%= product.name %>">
+        </div>
+        <div>
+          <p>
+            Description:
+          </p>
+          <p>
+            <textarea rows="10" cols="40" name="description"><%= product.description %></textarea>
+          </p>
+        </div>
+
+        <button type="submit">save changes</button>
+      </form>
+    </div>
+
+    <p>
+      <a href="/products/<%= product.id %>"><< back to product</a>
+    </p>
+  </body>
+</html>

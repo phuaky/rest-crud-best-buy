@@ -9,14 +9,11 @@
     <a href="/">
       <img src="/img/logo.png">
     </a>
-    
+
     <h1>Create New Product</h1>
 
     <div class="product">
-      <form action="/products/<%= product.id %>" method="POST">
-        <div>
-          Price: <input type="text" name="price" value="">
-        </div>
+      <form action="/products" method="POST">
         <div>
           Price: <input type="text" name="price" value="">
         </div>
@@ -27,7 +24,7 @@
           <p>
             Description:
           </p>
-          <textarea row="10" col="80" name="description" value="">
+          <textarea row="10" col="40" name="description"></textarea>
         </div>
 
         <button type="submit">create product</button>

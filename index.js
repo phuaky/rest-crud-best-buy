@@ -29,6 +29,10 @@ app.get("/products", function(req, res) {
   res.render('products_all', {products: products});
 });
 
+app.get("/products/new", function(req, res) {
+  res.render('product_new');
+});
+
 app.get("/products/:name", function(req, res) {
   var product = products[0];
   res.render('product_detail', {product: product});

@@ -17,33 +17,123 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
-// Load the todo list from a file.
-var productsJSON = fs.readFileSync('./products.json');
-products = JSON.parse(productsJSON);
-
+// Home page.
 app.get("/", function(req, res) {
   res.render('index', {totalProducts: products.length});
 });
 
-app.get("/products", function(req, res) {
-  res.render('products_all', {products: products});
-});
-
+// CREATE
 app.get("/products/new", function(req, res) {
   res.render('product_new');
 });
 
-app.get("/products/:name", function(req, res) {
-  var product = products[0];
+app.post("/products", function(req, res) {
+  console.log("create", req.body);
+  // generate a new id and create the whole product.
+  var id = "ZX0000" + products.length;
+  var product = {
+    id: id,
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description
+  };
+
+  createProduct(product);
+
+  res.redirect('/products/' + product.id);
+});
+
+// READ
+app.get("/products", function(req, res) {
+  res.render('products_all', {products: products});
+});
+
+app.get("/products/:id", function(req, res) {
+  var product = getProduct(req.params.id);
   res.render('product_detail', {product: product});
 });
 
-app.get("/products/:name/edit", function(req, res) {
-  var product = products[0];
+// UPDATE (get an HTML page where user fills values in)
+app.get("/products/:id/edit", function(req, res) {
+  var product = getProduct(req.params.id);
   res.render('product_edit', {product: product});
 });
 
-// All AJAX API routes
+// UPDATE (this route accept info from the HTML form)
+app.put("/products/:id/", function(req, res) {
+  var product = getProduct(req.params.id);
+  product.name = req.body.name;
+  product.price = req.body.price;
+  product.description = req.body.description;
+
+  editProduct(product);
+
+  res.redirect('/products/' + product.id);
+});
+
+app.delete("/products/:id/", function(req, res) {
+  deleteProduct(req.params.id);
+  res.send(true);
+});
 
 console.log("You're listening to the smooth smooth sounds of http://localhost:3000");
 app.listen(3000);
+
+function getProducts() {
+  // Load the todo list from a file.
+  var productsJSON = fs.readFileSync('./products.json');
+  products = JSON.parse(productsJSON);
+  return products;
+}
+
+function getProduct(id) {
+  var products = getProducts();
+
+  var product = undefined;
+  for (var i = 0; i < products.length; i++) {
+    if (products[i].id === id) {
+      product = products[i];
+    }
+  }
+  return product;
+}
+
+function editProduct(newProductInfo) {
+  var products = getProducts();
+
+  // find the product in the original dataset
+  var product = undefined;
+  for (var i = 0; i < products.length; i++) {
+    if (products[i].id === id) {
+      // replace the old into with the new info.
+      products[i] = newProductInfo;
+    }
+  }
+
+  // write all the products back to file.
+  writeProducts(products);
+}
+
+function createProduct(newProduct) {
+  var products = getProducts();
+  products.push(newProduct);
+
+  writeProducts(products);
+}
+
+function deleteProduct(id) {
+  var products = getProducts();
+  products = products.filter(function(product) {
+    // only keep products that don't have the id of the
+    // product we're deleting.
+    return product.id !== id;
+  })
+
+  writeProducts(products);
+}
+
+// Converts the given products to JSON and saves the list to a permanent file.
+function writeProducts(products) {
+  var json = JSON.stringify(products);
+  fs.writeFileSync('./products.json', json);
+}

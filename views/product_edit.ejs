@@ -13,7 +13,8 @@
     <h1>Product Detail</h1>
 
     <div class="product">
-      <form action="/products/<%= product.id %>" method="PUT">
+      <form action="/products/<%= product.id %>" method="POST">
+        <input type="hidden" name="_method" value="PUT">
         <div>
           <!-- we're making our app so no one can change the id. -->
           ID: <%= product.id %>

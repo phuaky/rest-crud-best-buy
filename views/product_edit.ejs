@@ -13,7 +13,7 @@
     <h1>Product Detail</h1>
 
     <div class="product">
-      <form action="/products/<%= product.id %>" method="POST">
+      <form method="POST" action="/products/<%= product.id %>?_method=PUT">
         <input type="hidden" name="_method" value="PUT">
         <div>
           <!-- we're making our app so no one can change the id. -->
@@ -35,6 +35,10 @@
         </div>
 
         <button type="submit">save changes</button>
+      </form>
+
+      <form method="POST" action="/products/<%= product.id %>?_method=DELETE">
+        <button type="submit">delete product</button>
       </form>
     </div>
 

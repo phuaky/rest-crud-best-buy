@@ -2,8 +2,12 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser')
 var fs = require('fs');
+var methodOverride = require('method-override')
 
 var app = express();
+
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
 
 // configure app to use ejs for templates
 app.set('view engine', 'ejs');
@@ -19,6 +23,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 // Home page.
 app.get("/", function(req, res) {
+  var products = getProducts();
   res.render('index', {totalProducts: products.length});
 });
 
@@ -28,7 +33,6 @@ app.get("/products/new", function(req, res) {
 });
 
 app.post("/products", function(req, res) {
-  console.log("create", req.body);
   // generate a new id and create the whole product.
   var id = "ZX0000" + products.length;
   var product = {
@@ -45,6 +49,7 @@ app.post("/products", function(req, res) {
 
 // READ
 app.get("/products", function(req, res) {
+  var products = getProducts();
   res.render('products_all', {products: products});
 });
 
@@ -60,8 +65,9 @@ app.get("/products/:id/edit", function(req, res) {
 });
 
 // UPDATE (this route accept info from the HTML form)
-app.put("/products/:id/", function(req, res) {
+app.put("/products/:id", function(req, res) {
   var product = getProduct(req.params.id);
+  product.id = req.params.id;
   product.name = req.body.name;
   product.price = req.body.price;
   product.description = req.body.description;
@@ -71,9 +77,10 @@ app.put("/products/:id/", function(req, res) {
   res.redirect('/products/' + product.id);
 });
 
-app.delete("/products/:id/", function(req, res) {
+app.delete("/products/:id", function(req, res) {
+  console.log("DELETE", req.params.id);
   deleteProduct(req.params.id);
-  res.send(true);
+  res.redirect("/products");
 });
 
 console.log("You're listening to the smooth smooth sounds of http://localhost:3000");
@@ -104,7 +111,7 @@ function editProduct(newProductInfo) {
   // find the product in the original dataset
   var product = undefined;
   for (var i = 0; i < products.length; i++) {
-    if (products[i].id === id) {
+    if (products[i].id === newProductInfo.id) {
       // replace the old into with the new info.
       products[i] = newProductInfo;
     }
@@ -122,6 +129,7 @@ function createProduct(newProduct) {
 }
 
 function deleteProduct(id) {
+  console.log("delete", id);
   var products = getProducts();
   products = products.filter(function(product) {
     // only keep products that don't have the id of the
